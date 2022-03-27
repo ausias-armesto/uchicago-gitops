@@ -25,7 +25,7 @@ flux-secret-wordpress:
 	kubeseal --format=yaml --cert=./security/sealed-secret-public-key.pem < ./wordpress/wordpress-admin-secret.yaml > ./wordpress/wordpress-admin-secret-sealed.yaml && \
 	kubectl apply -f ./wordpress/wordpress-admin-secret-sealed.yaml
 
-flux-security: decrypt-secrets
+flux-security: decrypt-sealed-private-key
 	kubectl apply -f clusters/k8s-$(env)/security/sealed-secret-private-key.yaml && \
 	kubectl scale deployment -n flux-system sealed-secrets-controller --replicas=0 && \
 	sleep 5 && \
