@@ -3,16 +3,7 @@ kind: Namespace
 metadata:
   name: wordpress
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: bitnami
-  namespace: flux-system
-spec:
-  url: https://charts.bitnami.com/bitnami
-  interval: 10m
 apiVersion: v1
----
 kind: PersistentVolume
 metadata:
   name: wordpress-pv 
@@ -32,13 +23,24 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: wordpress-pvc
+  namespace: wordpress
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: efs-sc
   resources:
     requests:
-      storage: 10Gi  
+      storage: 10Gi
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: bitnami
+  namespace: flux-system
+spec:
+  url: https://charts.bitnami.com/bitnami
+  interval: 10m
+apiVersion: v1
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
