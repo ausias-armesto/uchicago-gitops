@@ -72,6 +72,8 @@ spec:
       existingClaim: wordpress-pvc
       accessModes:
       - ReadWriteMany
+    volumePermissions:
+      enabled: true
     resources:
       limits: 
         memory: 768Mi
