@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wordpress
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: bitnami
+  namespace: flux-system
+spec:
+  url: https://charts.bitnami.com/bitnami
+  interval: 10m
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: wordpress
+  namespace: wordpress
+spec:
+  targetNamespace: wordpress
+  releaseName: wordpress
+  interval: 5m
+  upgrade:
+    remediation:
+      remediateLastFailure: true
+  test:
+    enable: true
+  chart:
+    spec:
+      chart: wordpress
+      version: 12.3.3
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+      interval: 1m    
+  values:
+    wordpressUsername: admin
+    existingSecret: wordpress-admin-secret
+    persistence:
+      accessModes:
+      - ReadWriteMany
+    resources:
+      limits: 
+        memory: 768Mi
+        cpu: 300m
+      requests: 
+        memory: 512Mi
+        cpu: 200m        
+    mariadb:
+      enabled: false
+    externalDatabase:
+      host: mysql.dev.wordpress.uchicago.local
+      port: 3306
+      user: wordpress
+      existingSecret: mysql-database-secret
+      database: wordpress
+    memcached:
+      enabled: true
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+      resources:
+        limits: 
+          memory: 768Mi
+          cpu: 300m
+        requests: 
+          memory: 512Mi
+          cpu: 200m          
