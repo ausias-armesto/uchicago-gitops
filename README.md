@@ -24,6 +24,7 @@ This repository holds the Kubernetes manifests of the apps to be deployed on Kub
 * `make decrypt-sealed-private-key env=dev`: Decrypts the encrypted master Sealed Secret pushed to the repository. It requires the file .vaul_pass to exist.
 * Install all the apps on the Kubernetes cluster (FluxCD, Sealed Secrets, Prometheus, Grafana, Wordpress). Change the _ghuser_ with the name of your Github forked repository user.
 ```
+export GITHUB_USER=ausias-armesto
 export GITHUB_TOKEN=<my-github-credentials-token>
 make flux-bootstrap env=dev ghuser=ausias-armesto
 ```
