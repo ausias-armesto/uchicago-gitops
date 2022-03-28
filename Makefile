@@ -31,7 +31,10 @@ flux-security: decrypt-sealed-private-key
 	sleep 5 && \
 	kubectl scale deployment -n flux-system sealed-secrets-controller --replicas=1 && \
 	make flux-secret-mysql && \
-	make flux-secret-wordpress
+	make flux-secret-wordpress && \
+	kubectl scale deployment --namespace=wordpress wordpress --replicas=0 && \
+	sleep 5 && \
+	kubectl scale deployment --namespace=wordpress wordpress --replicas=1
 
 
 flux-uninstall:

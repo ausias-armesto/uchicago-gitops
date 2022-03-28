@@ -28,15 +28,12 @@ export GITHUB_USER=ausias-armesto
 export GITHUB_TOKEN=<my-github-credentials-token>
 export EFS_ID=$(aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text)
 sed -i.back 's/_EFS-ID_/'$EFS_ID'/' ./clusters/k8s-dev/wordpress/wordpress.yaml
+git commit -m "Updated the EFS ID" ./clusters/k8s-dev/wordpress/wordpress.yaml
+git push
 make flux-bootstrap env=dev ghuser=ausias-armesto
 
 ```
 * `make flux-security env=dev`: Resets the master Sealed secrets by using the encrypted one stored in the repository, and then starts creating seals secrets with the new master sealed secret. 
-```
-k config set-context --current --namespace=wordpress
-k scale deployment wordpress --replicas=0
-k scale deployment wordpress --replicas=1
-```
 * `make flux-uninstall`: Deletes all Kubernetes resources installed on the cluster.
 
 
