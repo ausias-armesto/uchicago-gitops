@@ -29,11 +29,16 @@ export GITHUB_TOKEN=<my-github-credentials-token>
 export EFS_ID=$(aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text)
 sed -i.back 's/_EFS-ID_/'$EFS_ID'/' ./clusters/k8s-dev/wordpress/wordpress.yaml
 make flux-bootstrap env=dev ghuser=ausias-armesto
-k config set-context --current --namespace=wordpress
+
 ```
 * `make flux-secret-mysql env=dev`: Gets the MySql password from AWS and stores it as a Sealed secret on the cluster.
 * `make flux-secret-wordpress env=dev`: Gets the Admin wordpress password from AWS and stores it as a Sealed secret on the cluster.
 * `make flux-security env=dev`: Resets the master Sealed secrets by using the encrypted one stored in the repository, and then starts creating seals secrets with the new master sealed secret. 
+```
+k config set-context --current --namespace=wordpress
+k scale deployment wordpress --replicas=0
+k scale deployment wordpress --replicas=1
+```
 * `make flux-uninstall`: Deletes all Kubernetes resources installed on the cluster.
 
 
