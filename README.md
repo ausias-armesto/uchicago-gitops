@@ -26,7 +26,10 @@ This repository holds the Kubernetes manifests of the apps to be deployed on Kub
 ```
 export GITHUB_USER=ausias-armesto
 export GITHUB_TOKEN=<my-github-credentials-token>
+export EFS_ID=$(aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text)
+sed -i.back 's/_EFS-ID_/'$EFS_ID'/' ./clusters/k8s-dev/wordpress/wordpress.yaml
 make flux-bootstrap env=dev ghuser=ausias-armesto
+k config set-context --current --namespace=wordpress
 ```
 * `make flux-secret-mysql env=dev`: Gets the MySql password from AWS and stores it as a Sealed secret on the cluster.
 * `make flux-secret-wordpress env=dev`: Gets the Admin wordpress password from AWS and stores it as a Sealed secret on the cluster.
