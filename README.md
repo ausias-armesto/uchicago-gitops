@@ -31,8 +31,6 @@ sed -i.back 's/_EFS-ID_/'$EFS_ID'/' ./clusters/k8s-dev/wordpress/wordpress.yaml
 make flux-bootstrap env=dev ghuser=ausias-armesto
 
 ```
-* `make flux-secret-mysql env=dev`: Gets the MySql password from AWS and stores it as a Sealed secret on the cluster.
-* `make flux-secret-wordpress env=dev`: Gets the Admin wordpress password from AWS and stores it as a Sealed secret on the cluster.
 * `make flux-security env=dev`: Resets the master Sealed secrets by using the encrypted one stored in the repository, and then starts creating seals secrets with the new master sealed secret. 
 ```
 k config set-context --current --namespace=wordpress
