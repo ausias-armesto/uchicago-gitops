@@ -1,4 +1,8 @@
-# Git Ops Repository
+# The Univerisity of Chicago - Devops Course - Git Ops Repository
+
+## Introduction
+
+This repository has been created as part of the contents for the [Devops Course](https://online.professional.uchicago.edu/course/dtb-dev/) at the [The Univerisity of Chicago](https://online.professional.uchicago.edu/) as an Teacher Assistant.
 
 This repository holds the Kubernetes manifests of the apps to be deployed on Kubernetes. It uses [Flux CD](https://fluxcd.io/) as a continuous delivery tool over Kubernetes.
 
