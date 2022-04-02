@@ -1,6 +1,6 @@
 flux-install:
 	flux check --pre && \
-	flux bootstrap github --owner=$(ghuser) --repository=uchicago-gitops --branch=master --path=./clusters/k8s-$(env) --personal
+	flux bootstrap github --owner=`git config user.name` --repository=uchicago-gitops --branch=master --path=./clusters/k8s-$(env) --personal
 
 create-master-sealed-secret:
 	cd ./clusters/k8s-$(env)/security/ && \
@@ -45,7 +45,10 @@ restart-wordpress:
 
 refresh-secrets: regenerate-master-sealed-secret create-mysql-secret create-wordpress-secret restart-wordpress
 
-
+update-efs:
+	efs_id=`aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text` yq -i '.spec.csi.volumeHandle = env(efs_id)' ./clusters/k8s-$(env)/wordpress/wordpress-pv.yaml && \
+	git commit -m "Updating EFS ID" ./clusters/k8s-$(env)/wordpress/wordpress-pv.yaml && \
+	git push
 
 flux-uninstall:
 	flux uninstall && \

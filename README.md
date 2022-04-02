@@ -22,20 +22,10 @@ This repository holds the Kubernetes manifests of the apps to be deployed on Kub
 ## Commands
 
 * `make create-master-sealed-secret env=dev password=XXXXXXX`: This command is used only once to encrypt the master Sealed Secret and push it to the repository. Once the master sealed secret is uploaded encrypted in the repository you don't need to execute it again.
-
-* Install all the apps on the Kubernetes cluster (FluxCD, Sealed Secrets, Prometheus, Grafana, Wordpress). Change the _ghuser_ with the name of your Github forked repository user.
-```
-export GITHUB_USER=ausias-armesto
-export GITHUB_TOKEN=<my-github-credentials-token>
-export EFS_ID=$(aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text)
-sed -i.back 's/_EFS-ID_/'$EFS_ID'/' ./clusters/k8s-dev/wordpress/wordpress.yaml
-git commit -m "Updated the EFS ID" ./clusters/k8s-dev/wordpress/wordpress.yaml
-git push
-make flux-install env=dev ghuser=ausias-armesto
-
-```
+* `make update-efs env=dev`: Updates the EFS FileSystem ID before installing Flux
+* `export GITHUB_TOKEN=<my-github-credentials-token>`: Export the Credentials token in an environment variable which will be used by Flux
+* `make flux-install env=dev`: Install all the apps on the Kubernetes cluster (FluxCD, Sealed Secrets, Prometheus, Grafana, Wordpress). Change the _ghuser_ with the name of your Github forked repository user.
 * `make refresh-secrets env=dev`: Takes the encrypted master sealed secret pushed into the repository and applies it into the new cluster. Besides it creates the secrets for Mysql and Wordpress.
-* `make flux-security env=dev`: Resets the master Sealed secrets by using the encrypted one stored in the repository, and then starts creating seals secrets with the new master sealed secret. 
 * `make flux-uninstall`: Deletes all Kubernetes resources installed on the cluster.
 
 
