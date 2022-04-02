@@ -5,9 +5,9 @@ This repository holds the Kubernetes manifests of the apps to be deployed on Kub
 ## Prerequisites
 
 - Installed Kubectl v1.23.1
-- Installed Fluxcd 0.25.2
+- Installed Fluxcd 0.28.3
 - Installed kubeseal v0.17.2
-- Installed yq
+- Installed yq v4.24.2
 
 ## Apps Installed on the Repository
 
@@ -27,8 +27,6 @@ This repository holds the Kubernetes manifests of the apps to be deployed on Kub
 * `make flux-install env=dev`: Install all the apps on the Kubernetes cluster (FluxCD, Sealed Secrets, Prometheus, Grafana, Wordpress). Change the _ghuser_ with the name of your Github forked repository user.
 * `make refresh-secrets env=dev`: Takes the encrypted master sealed secret pushed into the repository and applies it into the new cluster. Besides it creates the secrets for Mysql and Wordpress.
 * `make flux-uninstall`: Deletes all Kubernetes resources installed on the cluster.
-
-
 
 ## Screenshots
 
