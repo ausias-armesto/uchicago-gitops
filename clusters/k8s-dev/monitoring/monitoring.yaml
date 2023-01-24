@@ -17,6 +17,8 @@ kind: Kustomization
 metadata:
   name: monitoring-stack
   namespace: flux-system
+  lables:
+    app: monitoring-stack
 spec:
   dependsOn:
     - name: flux-system
