@@ -46,6 +46,7 @@ restart-wordpress:
 refresh-secrets: regenerate-master-sealed-secret create-mysql-secret create-wordpress-secret restart-wordpress
 
 update-efs:
+	cd ../uchicago-gitops && \
 	efs_id=`aws efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text` yq -i '.spec.csi.volumeHandle = env(efs_id)' ./clusters/k8s-$(env)/wordpress/wordpress-pv.yaml && \
 	git commit -m "Updating EFS ID" ./clusters/k8s-$(env)/wordpress/wordpress-pv.yaml && \
 	git push
